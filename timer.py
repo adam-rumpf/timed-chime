@@ -25,6 +25,8 @@ def _read_settings(infile="settings.ini"):
         sound - Name of chime sound file in sound_folder.
         interval - Number of seconds between chimes.
         cutoff - Maximum number of loops to run.
+        sound2 - Alternate chime sound. If nonempty, alternates between playing
+            chiems with sound effect "sound" and "sound2".
         interval2 - Alternate time interval. If nonempty, alternates between
             playing chimes at time intervals of "interval" and "interval2".
     """
@@ -37,20 +39,26 @@ def _read_settings(infile="settings.ini"):
     interval = int(config["settings"]["interval"])
     cutoff = int(config["settings"]["cutoff"])
     
-    # Read interval2 last (for backward compatibility)
+    # Read sound2 and interval2 last (for backward compatibility)
+    sound2 = sound
+    try:
+        sound2 = os.path.join(sound_folder,
+                              config["settings"]["sound2"].strip('"\' '))
+    except (KeyError, ValueError):
+        pass
     interval2 = interval
     try:
         interval2 = int(config["settings"]["interval2"])
     except (KeyError, ValueError):
         pass
     
-    return sound, interval, cutoff, interval2
+    return sound, interval, cutoff, sound2, interval2
 
 def main():
     """Runs the main chime-playing script."""
     
     # Read settings
-    sound, interval, cutoff, interval2 = _read_settings()
+    sound, interval, cutoff, sound2, interval2 = _read_settings()
     
     # Run until a stop condition is met
     stopping = False
@@ -59,8 +67,11 @@ def main():
     while stopping == False:
         iter += 1
         
-        # Play sound
-        playsound3.playsound(sound)
+        # Play alternating sounds
+        if alternate == False:
+            playsound3.playsound(sound)
+        else:
+            playsound3.playsound(sound2)
         
         # Determine stopping condition
         if iter >= cutoff:
@@ -79,7 +90,7 @@ def main():
 
 if __name__ == "__main__":
     # Read settings and compute maximum time
-    _, interval, cutoff, interval2 = _read_settings()
+    _, interval, cutoff, _, interval2 = _read_settings()
     maxtime = cutoff*((interval + interval2)/2)
     if maxtime <= 60:
         mtstring = f"{maxtime:g} seconds"

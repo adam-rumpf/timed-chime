@@ -9,6 +9,7 @@ A small utility for playing chimes at timed intervals. Running the main script p
 This utility is meant to be run by executing the main `timer.py` script, while changing settings in the `settings.ini` file. Available settings include:
 
 * `sound`: Name of the chime sound effect file in the `sounds/` folder.
+* `sound2`: If nonempty, causes chimes to alternate between the sound effects "sound" and "sound2".
 * `interval`: Number of seconds between chimes.
 * `interval2`: If nonempty, causes chimes to alternate between `interval` seconds and `interval2` seconds.
 * `cutoff`: Maximum number of chimes to play before automatically stopping.
@@ -17,4 +18,4 @@ This utility is meant to be run by executing the main `timer.py` script, while c
 
 This software is released under an [MIT license](https://img.shields.io/github/license/adam-rumpf/timed-chime), Adam Rumpf, 2026.
 
-The included sound effect `chime.wav` was generated using [Bfxr](https://www.bfxr.net/).
+The included sound effect `chime.wav` was generated using [Bfxr](https://www.bfxr.net/). Its pitch was lowered to create `chime2.wav` using [Audacity](https://www.audacityteam.org/).
