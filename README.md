@@ -13,6 +13,7 @@ This utility is meant to be run by executing the main `timer.py` script, while c
 * `interval`: Number of seconds between chimes.
 * `interval2`: If nonempty, causes chimes to alternate between `interval` seconds and `interval2` seconds.
 * `cutoff`: Maximum number of chimes to play before automatically stopping.
+* `delay`: If nonempty, specifies an initial delay before the first chime (in seconds).
 
 ## Credits
 

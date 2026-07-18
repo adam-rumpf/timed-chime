@@ -29,6 +29,7 @@ def _read_settings(infile="settings.ini"):
             chiems with sound effect "sound" and "sound2".
         interval2 - Alternate time interval. If nonempty, alternates between
             playing chimes at time intervals of "interval" and "interval2".
+        delay - If nonempty, number of seconds before first chime.
     """
     
     config = configparser.ConfigParser()
@@ -39,7 +40,7 @@ def _read_settings(infile="settings.ini"):
     interval = int(config["settings"]["interval"])
     cutoff = int(config["settings"]["cutoff"])
     
-    # Read sound2 and interval2 last (for backward compatibility)
+    # Read sound2, interval2, and delay last (for backward compatibility)
     sound2 = sound
     try:
         sound2 = os.path.join(sound_folder,
@@ -51,14 +52,22 @@ def _read_settings(infile="settings.ini"):
         interval2 = int(config["settings"]["interval2"])
     except (KeyError, ValueError):
         pass
+    delay = 0
+    try:
+        delay = int(config["settings"]["delay"])
+    except (KeyError, ValueError):
+        pass
     
-    return sound, interval, cutoff, sound2, interval2
+    return sound, interval, cutoff, sound2, interval2, delay
 
 def main():
     """Runs the main chime-playing script."""
     
     # Read settings
-    sound, interval, cutoff, sound2, interval2 = _read_settings()
+    sound, interval, cutoff, sound2, interval2, delay = _read_settings()
+    
+    # Initial delay
+    time.sleep(delay)
     
     # Run until a stop condition is met
     stopping = False
@@ -90,7 +99,7 @@ def main():
 
 if __name__ == "__main__":
     # Read settings and compute maximum time
-    _, interval, cutoff, _, interval2 = _read_settings()
+    _, interval, cutoff, _, interval2, _ = _read_settings()
     maxtime = cutoff*((interval + interval2)/2)
     if maxtime <= 60:
         mtstring = f"{maxtime:g} seconds"
